@@ -144,12 +144,12 @@ expired_introduction_event_list = [
 
 path = sys.argv[1]
 if path != None and path != "":
-    table = Table("mai2_game_event")
-    sql = Query.into(table).columns("event_id", "start_date", "end_date", "type", "remarks")
+    table = Table("mai2_game_event_template")
+    sql = Query.into(table).columns("event_id", "start_date", "end_date", "type", "template_id")
 
     g = os.walk(path)
 
-    outputFile = path + "\open_event_list.sql"
+    outputFile = path + "\open_event_template_list.sql"
     print(path)
     print(outputFile)
     if os.path.exists(outputFile):
@@ -168,9 +168,9 @@ if path != None and path != "":
                 infoType = root.find('infoType').text
                 startDate = parse_ymd(remark[:6])
                 if int(event_id) in expired_introduction_event_list:
-                    sql = sql.insert(int(event_id), startDate.strftime("%Y-%m-%d %H:%M:%S.0"), "2024-03-21 07:00:01.0", int(infoType), remark)
+                    sql = sql.insert(int(event_id), startDate.strftime("%Y-%m-%d %H:%M:%S.0"), "2024-03-21 07:00:01.0", int(infoType), 6)
                 else:
-                    sql = sql.insert(int(event_id), startDate.strftime("%Y-%m-%d %H:%M:%S.0"), "2029-01-01 23:59:59.0", int(infoType), remark)
+                    sql = sql.insert(int(event_id), startDate.strftime("%Y-%m-%d %H:%M:%S.0"), "2029-01-01 23:59:59.0", int(infoType), 6)
 
     with open(outputFile, "w", newline='', encoding='utf_8_sig') as f:
         f.write(sqlparse.format(sql.get_sql(quote_char="`")))
